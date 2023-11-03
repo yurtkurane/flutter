@@ -1,114 +1,96 @@
 import 'package:flutter/material.dart';
+import 'package:introapp/data/questions.dart';
 
-// auto execute
 void main() {
-  // flutter'ı initialize eden runApp
-
-  // widget => en küçükten en büyüğe giden şablonlar
-
-  // named & unnamed paramaters
-
-  // constant 
-    runApp(MaterialApp(
-    home: Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: MyProfileWidget(),
-    ),
-  ));
+  runApp(const MaterialApp(home: QuizScreen()));
 }
 
-class MyProfileWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 398,
-      height: 800,
-      padding: const EdgeInsets.only(
-        top: 145,
-        left: 84,
-        right: 84,
-        bottom: 356,
-      ),
-      clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(color: Color(0xFF673AB7)),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: 220,
-            height: 180,
-            child: Stack(
-              children: [
-                Positioned(
-                  left : 14,
-                  top: 0,
-                  child: Container(
-                    width: 180,
-                    height: 180,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image:
-                            NetworkImage("https://avatars.githubusercontent.com/u/133433679?v=4"),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+// boilerplate => basmakalıp
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key}); // 1. gereksinim
+
+  // 2. gereksinim
+  // Hot Reload => Restarta gerek kalmadan (spesifik durumlar hariç)
+  // değişikliklerin görünmesi.
+  Widget build(BuildContext buildContext) {
+    return Scaffold(
+      backgroundColor: Colors.deepPurpleAccent,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // asset
+            Image.asset(
+              "assets/images/quiz-logo.png",
+              width: 240,
             ),
-          ),
-          const SizedBox(height: 10),
-          const SizedBox(
-            width: double.infinity,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Elif Yurtkuran',
-                  style: TextStyle(
+            // Image.network(
+            //     "https://miro.medium.com/v2/resize:fit:720/format:webp/1*FBRsnCP9wE84UVW1Kkv5Yw.jpeg"),
+            const Text("Quiz App",
+                style: TextStyle(
                     color: Colors.white,
-                    fontSize: 36,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-                SizedBox(height: 9),
-                Text(
-                  'Tobeto - Mobil Geliştirici -1B\n31.10.2023',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 17,
-                    fontFamily: 'Inter',
-                    fontWeight: FontWeight.w400,
-                    height: 0,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.5)),
+            ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber, foregroundColor: Colors.black),
+              child: const Text(
+                "Oyuna Başla",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
 }
 
+// SABIT UI
 
-   
-// format document => shift +option + F // cmd+i => parantez içi kullanabilirlerin çıkması için 
+// StatefullWidget
 
+// 2 class
+// Widget - State
+class QuizScreen extends StatefulWidget {
+  const QuizScreen({super.key});
 
-// Stateless => UI 
-// Stateful => Dynamic UI
+  @override
+  State<QuizScreen> createState() {
+    return _QuizState();
+  }
+}
 
-// resim -> 
-// İsim Soyisim
-// tobeto - mobil geliştirme -1b
-// günün tarihi (statik) 31.10.2023
+// _State
+class _QuizState extends State<QuizScreen> {
+  String text = "Aşağıdakilerden hangisi bir widget türüdür";
 
+  void changeText() {
+    setState(() {
+      text = "Yeni Değer";
+    });
+  }
 
+  @override
+  Widget build(BuildContext buildContext) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(questions[0].question),
+            ...questions[0].answers.map((answer) {
+              return ElevatedButton(
+                  onPressed: () {
+                    changeText();
+                  },
+                  child: Text(answer));
+            })
+          ],
+        ),
+      ),
+    );
+  }
+}
