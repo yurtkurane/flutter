@@ -19,7 +19,17 @@ class _ExpensesPagesState extends State<ExpensesPages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+        title: const Text('ExpensesPages'),
+        actions: <Widget> [
+          IconButton(
+            icon: const Icon(Icons.add_circle),
+            tooltip: 'Yeni giriş',
+            iconSize: 32,
+            onPressed: () {},
+            )
+              ]
+         ),
        body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center,
         children: [
