@@ -3,8 +3,12 @@ import 'package:introapp/data/questions.dart';
 
 
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({Key? key, required void Function() onResult});
+    // named argument
 
+  // default argumentlar required olarak gelir
+  // named argumentlar required olarak gelmez, gerektiğinde işaretlenmesi gerekir.
+  const QuizScreen({super.key, required this.chooseAnswer});
+  final void Function(String answer) chooseAnswer;
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -41,6 +45,7 @@ class _QuizScreenState extends State<QuizScreen> {
               ...questions[currentQuestionIndex].answers.map((answer) {
                 return ElevatedButton(
                   onPressed: () {
+                     widget.chooseAnswer(answer);
                     nextQuestion();
                   },
                   child: Text(answer),
