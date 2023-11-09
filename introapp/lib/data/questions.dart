@@ -1,5 +1,6 @@
 import 'package:introapp/models/question_model.dart';
 
+
 const questions = [
   QuestionModel("Flutter nedir?", ["Bir programlama dili", "Bir oyun motoru", "Bir çerçeve", "Bir web tarayıcısı"]),
   QuestionModel("Flutter hangi şirket tarafından geliştirilmiştir?", ["Google", "Apple", "Facebook", "Microsoft"]),

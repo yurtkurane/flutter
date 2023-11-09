@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:introapp/data/questions.dart';
 
+
 class QuizScreen extends StatefulWidget {
-  const QuizScreen({Key? key});
+  const QuizScreen({Key? key, required void Function() onResult});
+
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -10,12 +12,15 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   int currentQuestionIndex = 0;
+  
 
   void nextQuestion() {
     setState(() {
       if (currentQuestionIndex < questions.length - 1) {
         currentQuestionIndex++;
-      } else {}
+      } else {
+        Navigator.of(context).pushNamed('/result');
+      }
     });
   }
 
