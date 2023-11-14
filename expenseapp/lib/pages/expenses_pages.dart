@@ -1,50 +1,43 @@
+import 'dart:math';
+
 import 'package:expenseapp/models/expense.dart';
+import 'package:expenseapp/widget/expense_item.dart';
 import 'package:flutter/material.dart';
 
-class ExpensesPages extends StatefulWidget {
-  const ExpensesPages({ Key? key }) : super(key: key);
+
+class ExpensesPage extends StatefulWidget {
+  const ExpensesPage({Key? key}) : super(key: key);
 
   @override
-  _ExpensesPagesState createState() => _ExpensesPagesState();
+  _ExpensesPageState createState() => _ExpensesPageState();
 }
 
-class _ExpensesPagesState extends State<ExpensesPages> {
-
+class _ExpensesPageState extends State<ExpensesPage> {
   List<Expense> expenses = [
-    Expense(name: "Yemek", price: 500, date: DateTime.now()),
-    Expense(name: "Udemy Kursu", price: 500, date: DateTime.now()),
+    Expense(name: "Yemek", price: 500.529, date: DateTime.now()),
+    Expense(name: "Udemy Kursu", price: 200, date: DateTime.now()),
   ];
-
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('ExpensesPages'),
-        actions: <Widget> [
-          IconButton(
-            icon: const Icon(Icons.add_circle),
-            tooltip: 'Yeni giriş',
-            iconSize: 32,
-            onPressed: () {},
-            )
-              ]
-         ),
-       body: Center(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text("Grafik Bölümü"),
-          SizedBox(
-            height: 400,
-            child: ListView.builder(
+    return Center(
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        const SizedBox(
+          height: 150,
+          child: Text("Grafik Bölümü"),
+        ),
+        Expanded(
+          child: ListView.builder(
               itemCount: expenses.length,
-              itemBuilder: (context,index){
-                return Text(expenses[index].name);
-            }),
-          )]
-           ),
-      ),  
+              itemBuilder: (context, index) {
+                return ExpenseItem(expenses[index]);
+              }),
+        ),
+        const SizedBox(
+          height: 150,
+          child: Text("Burası bottom bar."),
+        )
+      ]),
     );
   }
 }
-
