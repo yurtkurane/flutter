@@ -18,14 +18,14 @@ class _MainPageState extends State<MainPage> {
       appBar: AppBar(
         foregroundColor: Colors.white,
         title: const Text("Expense App"),
-        backgroundColor: Colors.orange,
+        backgroundColor: Color.fromARGB(255, 59, 18, 222),
         actions: [
           IconButton(
               onPressed: () {
                 showModalBottomSheet(
                     context: context,
                     builder: (ctx) {
-                      return NewExpense();
+                      return const NewExpense();
                     });
               },
               icon: const Icon(Icons.add),

@@ -1,4 +1,6 @@
+import 'package:expenseapp/models/expense.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewExpense extends StatefulWidget {
   const NewExpense({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class _NewExpenseState extends State<NewExpense> {
   var _expenseNameController = TextEditingController();
   var _expensePriceController = TextEditingController();
   DateTime? _selectedDate;
+  Category _selectedCategory = Category.work;
+
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -39,35 +43,61 @@ class _NewExpenseState extends State<NewExpense> {
             maxLength: 50,
             decoration: InputDecoration(labelText: "Harcama Adı"),
           ),
-
-          TextField(
-            controller: _expensePriceController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: "Harcama Miktarı"),
-          ),
-          const Spacer(),
-          Container(
-            decoration: BoxDecoration(border:Border.all()),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => _selectDate(context),
-                      icon: Icon(Icons.calendar_month),
-                    ),
-                    Text("Tarih Seçiniz: ${_selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'Seçilmedi'}"),
-                  ],
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _expensePriceController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(labelText: "Harcama Miktarı", prefixText: "₺"),
                 ),
-            ),
+              ),
+
+              IconButton(
+                onPressed: () => _selectDate(context),
+                icon: Icon(Icons.calendar_month),
+              ),
+              Text("Tarih Seçiniz: ${_selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'Seçilmedi'}"),
+            ],
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Row(
+            children: [
+              DropdownButton(
+                value: _selectedCategory,
+                items: Category.values.map((category) {
+                return DropdownMenuItem (
+                  value: category, child: Text(category.name));
+              }).toList(),
+               onChanged: (value) {
+                setState((){
+                  if (value != null) _selectedCategory = value;
+                });
+              })
+            ],
           ),
           const Spacer(),
-          ElevatedButton(
-              onPressed: () {
-                print(
-                    "Kaydedilen değer: ${_expenseNameController.text} ${_expensePriceController.text}");
-              },
-              child: Text("Ekle"))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(onPressed: () {
+                Navigator.pop(context);
+              }, 
+              child: const Text("Kapat")),
+              const SizedBox(
+                width: 12,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    print(
+                        "Kaydedilen değer: ${_expenseNameController.text} ${_expensePriceController.text}");
+                  },
+                  child: Text("Ekle")),
+            ],
+          ),
+
         ]),
       ),
     );

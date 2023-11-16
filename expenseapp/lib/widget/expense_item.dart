@@ -16,6 +16,8 @@ final Expense expense;
           children: [
             Text("TL ${expense.price.toStringAsFixed(2)}"), 
             const Spacer(),
+            Icon(categoryIcons[expense.category]),
+            const SizedBox (width:6),
             Text (DateFormat.yMd().format(expense.date)),
           ],
         )] ),
