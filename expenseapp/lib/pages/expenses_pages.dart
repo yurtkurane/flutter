@@ -1,8 +1,8 @@
 
-
 import 'package:expenseapp/models/expense.dart';
 import 'package:expenseapp/widget/expense_item.dart';
 import 'package:flutter/material.dart';
+
 
 
 class ExpensesPage extends StatefulWidget {
@@ -15,12 +15,12 @@ class ExpensesPage extends StatefulWidget {
 }
 
 class _ExpensesPageState extends State<ExpensesPage> {
-  
+    List<Expense> _removedExpenses = [];
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+    return Scaffold(
+      body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const SizedBox(
           height: 150,
           child: Text("Grafik Bölümü"),
@@ -33,20 +33,45 @@ class _ExpensesPageState extends State<ExpensesPage> {
                 key: ValueKey(widget.expenses[index]),
                 child: ExpenseItem(widget.expenses[index]),
                 onDismissed: (direction){
-                  if(direction== DismissDirection.startToEnd){
+                  if(direction == DismissDirection.endToStart){
+                      setState(() {
+                        _removedExpenses.add(widget.expenses[index]);
+                      });
 
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: const Text('Harcama bilgisi silindi'),
+                          action: SnackBarAction(
+                            label: 'Geri Al',
+                            onPressed: () {
+                              _undoRemove();
+                            },
+                          ),
+                        ),
+                      );
                   }
-                  print(direction);
                 widget.onRemove(widget.expenses[index]);
                 },
                 );
               }),
         ),
-        const SizedBox(
-          height: 150,
-          child: Text("Burası bottom bar."),
-        )
       ]),
     );
   }
+    void _undoRemove() {
+    if (_removedExpenses.isNotEmpty) {
+      Expense lastRemovedExpense = _removedExpenses.removeLast();
+
+      setState(() {
+        widget.expenses.add(lastRemovedExpense);
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Veri geri alındı'),
+        ),
+      );
+    }
+  }
 }
+
