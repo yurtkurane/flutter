@@ -12,14 +12,15 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   var _expenseNameController = TextEditingController();
   var _expensePriceController = TextEditingController();
-  DateTime? _selectedDate;
+  DateTime _selectedDate = DateTime.now();
+  bool isDateSelected = false;
   Category _selectedCategory = Category.work;
 
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate,
       firstDate: DateTime.now().subtract(Duration(days: 365)), // 1 yıl önce
       lastDate: DateTime.now(),
     );
@@ -27,10 +28,17 @@ class _NewExpenseState extends State<NewExpense> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
+        isDateSelected = true;
       });
     }
   }
-
+  void _addExpense() {
+    Expense expense = Expense(
+        name: _expenseNameController.text,
+        price: double.parse(_expensePriceController.text),
+        date: _selectedDate,
+        category: _selectedCategory);
+  }
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,7 +65,7 @@ class _NewExpenseState extends State<NewExpense> {
                 onPressed: () => _selectDate(context),
                 icon: Icon(Icons.calendar_month),
               ),
-              Text("Tarih Seçiniz: ${_selectedDate != null ? _selectedDate!.toLocal().toString().split(' ')[0] : 'Seçilmedi'}"),
+              Text("Tarih Seçiniz: ${_selectedDate != null ? _selectedDate.toLocal().toString().split(' ')[0] : 'Seçilmedi'}"),
             ],
           ),
           const SizedBox(
@@ -90,10 +98,7 @@ class _NewExpenseState extends State<NewExpense> {
                 width: 12,
               ),
               ElevatedButton(
-                  onPressed: () {
-                    print(
-                        "Kaydedilen değer: ${_expenseNameController.text} ${_expensePriceController.text}");
-                  },
+                  onPressed: () => _addExpense(), 
                   child: Text("Ekle")),
             ],
           ),

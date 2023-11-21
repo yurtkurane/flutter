@@ -1,11 +1,11 @@
 
 import 'package:expenseapp/pages/expenses_pages.dart';
-import 'package:expenseapp/widget/new_expensive.dart';
-
+import 'package:expenseapp/widget/new_expense.dart';
 import 'package:flutter/material.dart';
 
+
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  const MainPage({Key? key}) : super(key: key);
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -37,6 +37,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
 
 
 
