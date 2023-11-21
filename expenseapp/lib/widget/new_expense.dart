@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({Key? key}) : super(key: key);
+  const NewExpense(this.onAdd, {Key? key}) : super(key: key);
+  final void Function(Expense expense) onAdd;
 
   @override
   _NewExpenseState createState() => _NewExpenseState();
@@ -12,8 +13,7 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   var _expenseNameController = TextEditingController();
   var _expensePriceController = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
-  bool isDateSelected = false;
+  DateTime? _selectedDate;
   Category _selectedCategory = Category.work;
 
 
@@ -28,17 +28,11 @@ class _NewExpenseState extends State<NewExpense> {
     if (picked != null && picked != _selectedDate) {
       setState(() {
         _selectedDate = picked;
-        isDateSelected = true;
+        const isDateSelected = true;
       });
     }
   }
-  void _addExpense() {
-    Expense expense = Expense(
-        name: _expenseNameController.text,
-        price: double.parse(_expensePriceController.text),
-        date: _selectedDate,
-        category: _selectedCategory);
-  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -63,9 +57,8 @@ class _NewExpenseState extends State<NewExpense> {
 
               IconButton(
                 onPressed: () => _selectDate(context),
-                icon: Icon(Icons.calendar_month),
-              ),
-              Text("Tarih Seçiniz: ${_selectedDate != null ? _selectedDate.toLocal().toString().split(' ')[0] : 'Seçilmedi'}"),
+                icon: const Icon(Icons.calendar_month),),
+              Text("Tarih Seçiniz: ${_selectedDate != null ? _selectedDate?.toLocal().toString().split(' ')[0] : 'Seçilmedi'}"),
             ],
           ),
           const SizedBox(
@@ -90,19 +83,32 @@ class _NewExpenseState extends State<NewExpense> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ElevatedButton(onPressed: () {
-                Navigator.pop(context);
-              }, 
-              child: const Text("Kapat")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Kapat")),
               const SizedBox(
                 width: 12,
               ),
               ElevatedButton(
-                  onPressed: () => _addExpense(), 
+                  onPressed: () {
+                    double? price =
+                        double.tryParse(_expensePriceController.text);
+
+                    // validation
+
+                    Expense expense = Expense(
+                        name: _expenseNameController.text,
+                        price: price!,
+                        date: _selectedDate!,
+                        category: _selectedCategory);
+                    widget.onAdd(expense);
+                    Navigator.pop(context);
+                  },
                   child: Text("Ekle")),
             ],
           ),
-
         ]),
       ),
     );

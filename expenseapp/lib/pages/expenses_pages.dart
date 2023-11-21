@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 
 
 class ExpensesPage extends StatefulWidget {
-  const ExpensesPage({Key? key}) : super(key: key);
+  const ExpensesPage(this.expenses, this.onRemove, {Key? key}) : super(key: key);
+  final List<Expense> expenses;
+  final void Function (Expense expense) onRemove;
 
   @override
   _ExpensesPageState createState() => _ExpensesPageState();
@@ -14,10 +16,6 @@ class ExpensesPage extends StatefulWidget {
 
 class _ExpensesPageState extends State<ExpensesPage> {
   
-  List<Expense> expenses = [
-    Expense(name: "Yemek", price: 500.529, date: DateTime.now(), category: Category.food),
-    Expense(name: "Udemy Kursu", price: 200, date: DateTime.now(), category: Category.work),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -29,9 +27,19 @@ class _ExpensesPageState extends State<ExpensesPage> {
         ),
         Expanded(
           child: ListView.builder(
-              itemCount: expenses.length,
+              itemCount: widget.expenses.length,
               itemBuilder: (context, index) {
-                return ExpenseItem(expenses[index]);
+                return Dismissible(
+                key: ValueKey(widget.expenses[index]),
+                child: ExpenseItem(widget.expenses[index]),
+                onDismissed: (direction){
+                  if(direction== DismissDirection.startToEnd){
+
+                  }
+                  print(direction);
+                widget.onRemove(widget.expenses[index]);
+                },
+                );
               }),
         ),
         const SizedBox(
