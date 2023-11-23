@@ -25,5 +25,25 @@ class Expense{
   final Category category;
 }
 
+
+class CategoryExpenses {
+const CategoryExpenses({required this.category, required this.expenses});
+
+  final Category category;
+  final List<Expense> expenses;
+
+  double get totalCategoryPrice {
+    double sum = 0;
+
+    expenses.forEach((expense){
+      sum += expense.price;
+
+    });
+
+    return sum;
+
+  }
+}
+
 // id => 1,2,3..
 // String => uuid/guid

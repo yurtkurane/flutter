@@ -52,7 +52,9 @@ class _MainPageState extends State<MainPage> {
               iconSize: 32,)
         ],
       ),
-      body: ExpensesPage(expenses, removeExpense),
+      body: expenses.length > 0 
+           ? ExpensesPage(expenses, removeExpense)
+           : Text ("Harcama gideri eklemek için sağ üstteki + işaretine tıklayınız."),
     );
   }
 }
